@@ -1,15 +1,8 @@
 import './App.css';
 import Homepage from './Pages/homepage/Homepage.components'
+import Shop from './Pages/Shops/Shop.component';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-
-function Hats() {
-  return (
-    <>
-     <h1>Hats</h1>
-    </>
-  );
-}
 
 function App() {
   return (
@@ -17,7 +10,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/shop/:id" element={<Hats />} />
+          <Route path="/shop" element={<Shop />} />
         </Routes>
       </BrowserRouter>
     </>

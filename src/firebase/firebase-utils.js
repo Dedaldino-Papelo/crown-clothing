@@ -13,6 +13,7 @@ const firebaseConfig = {
 };
 
 export const createUserProfileDocument = async(userAuth, additionalData) => {
+
   if(!userAuth) return
 
   const userRef = doc(db, 'users', `${userAuth.uid}`);

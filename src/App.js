@@ -23,17 +23,15 @@ class App extends React.Component{
    this.unsubiscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
     if(userAuth){
       const userRef = await createUserProfileDocument(userAuth)
-      const getUsers = userRef.path.split("/")[0]
-
-      onSnapshot(doc(db, getUsers, `${userAuth.uid}`), (doc) => {
+      
+      onSnapshot((userRef), (doc) => {
         this.setState({
           currentUser: {
             id: doc.id,
             ...doc.data()
           }
-        }, () => {
-          console.log(this.state)
         })
+        console.log(this.state)
       })
     }
     this.setState({currentUser: userAuth})

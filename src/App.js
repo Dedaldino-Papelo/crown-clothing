@@ -5,49 +5,48 @@ import Shop from './Pages/Shops/Shop.component';
 import SignInsignOut from './Pages/signIn-signOut/signIn-signOut.component';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './components/header/header.component';
-import {auth, createUserProfileDocument} from './firebase/firebase-utils'
+import { auth, createUserProfileDocument } from './firebase/firebase-utils'
 import { onSnapshot } from "firebase/firestore";
-import {setCurrentUser} from './redux/user.actions'
+import { setCurrentUser } from './redux/user/user.actions'
 import { connect } from 'react-redux'
 
 
-class App extends React.Component{
+class App extends React.Component {
 
   unsubiscribeFromAuth = null
 
-  componentDidMount(){
-    const {setCurrentUser} = this.props
+  componentDidMount() {
+    const { setCurrentUser } = this.props
 
-   this.unsubiscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-    if(userAuth){
-      const userRef = await createUserProfileDocument(userAuth)
-      
-      onSnapshot((userRef), (doc) => {
-        setCurrentUser({
+    this.unsubiscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth)
+
+        onSnapshot((userRef), (doc) => {
+          setCurrentUser({
             id: doc.id,
-            ...doc.data() 
+            ...doc.data()
+          })
         })
-        console.log(this.state)
-      })
-    }
-    setCurrentUser(userAuth)
+      }
+      setCurrentUser(userAuth)
 
     })
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.unsubiscribeFromAuth()
   }
 
-  render(){
+  render() {
     return (
       <>
         <BrowserRouter>
-        <Header/>
+          <Header />
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/shop" element={<Shop />} />
-            <Route path="/signIn" element={<SignInsignOut />} />
+            <Route path="/signIn" element={< SignInsignOut />} />
           </Routes>
         </BrowserRouter>
       </>
@@ -55,8 +54,12 @@ class App extends React.Component{
   }
 }
 
-const mapDispatchProps = diapatch => ({
-  setCurrentUser: user => diapatch(setCurrentUser(user))
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
 })
 
-export default connect(null,mapDispatchProps)(App);
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

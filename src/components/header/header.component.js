@@ -4,8 +4,10 @@ import './header.style.scss'
 import Logo from '../../assets/Logo/084 crown.svg'
 import { signOutGoogle } from '../../firebase/firebase-utils'
 import { connect } from 'react-redux'
+import CartIcon from '../cart-icon/cart-icon.component'
+import CartDropdown from '../cart-dropdown/cart-dropdown.component'
 
-const Header = ({ currentUser }) => {
+const Header = ({currentUser, hidden}) => {
   return (
     <div className='header'>
       <Link to='/' className="logo-container">
@@ -25,14 +27,18 @@ const Header = ({ currentUser }) => {
             : <Link to={`/signIn`} className="option">SIGNIN</Link>
 
         }
+        <CartIcon />
       </div>
-
+      {
+        hidden ? null:  <CartDropdown /> 
+      }
     </div>
   )
 }
 
-const mapStateToProps = state => ({
-  currentUser: state.user.cuurentUSer
+const mapStateToProps = ({user: {currentUser}, cart:{hidden}}) => ({
+  currentUser,
+  hidden
 })
 
 export default connect(mapStateToProps)(Header) 
